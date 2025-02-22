@@ -4,11 +4,17 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import prettierPlugin from "eslint-plugin-prettier/recommended";
 import tseslint from "typescript-eslint";
+import pluginRouter from "@tanstack/eslint-plugin-router";
 
 export default tseslint.config(
   { ignores: ["dist", "coverage"] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended, prettierPlugin],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      prettierPlugin,
+      pluginRouter.configs["flat/recommended"],
+    ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
@@ -25,4 +31,3 @@ export default tseslint.config(
     },
   }
 );
-

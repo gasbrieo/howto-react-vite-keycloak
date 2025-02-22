@@ -1,7 +1,10 @@
 import type { FC } from "react";
+import { RouterProvider } from "@tanstack/react-router";
+
+import router from "@/router";
 
 const App: FC = () => {
-  return <div>MyApp</div>;
+  return <RouterProvider router={router} />;
 };
 
 export default App;
