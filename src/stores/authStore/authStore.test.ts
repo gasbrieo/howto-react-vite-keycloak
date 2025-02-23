@@ -82,4 +82,22 @@ describe("AuthStore", () => {
       expect(state.user).toBeNull();
     });
   });
+
+  describe("hasRole", () => {
+    it("should return true when user has role", () => {
+      useAuthStore.setState({ user: { roles: ["role1", "role2"] } });
+
+      const hasRole = useAuthStore.getState().hasRole("role1");
+
+      expect(hasRole).toBeTruthy();
+    });
+
+    it("should return true when user has role", () => {
+      useAuthStore.setState({ user: { roles: ["role1", "role2"] } });
+
+      const hasRole = useAuthStore.getState().hasRole("role3");
+
+      expect(hasRole).toBeFalsy();
+    });
+  });
 });

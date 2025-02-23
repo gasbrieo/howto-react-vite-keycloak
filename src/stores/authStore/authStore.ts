@@ -12,11 +12,12 @@ export type AuthAction = {
   initializeAuth: () => Promise<void>;
   login: () => Promise<void>;
   logout: () => void;
+  hasRole: (role: string) => boolean;
 };
 
 export const useAuthStore = create<AuthState & AuthAction>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       authenticated: false,
       user: null,
 
@@ -39,6 +40,11 @@ export const useAuthStore = create<AuthState & AuthAction>()(
       logout: () => {
         keycloak.logout();
         set({ user: null, authenticated: false });
+      },
+
+      hasRole: (role: string) => {
+        const user = get().user;
+        return user?.roles?.includes(role);
       },
     }),
     { name: "authStore" }

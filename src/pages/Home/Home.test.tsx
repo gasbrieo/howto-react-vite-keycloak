@@ -20,7 +20,7 @@ describe("Home", () => {
   it("should render properly", () => {
     render(<Home />);
 
-    expect(screen.getByText("Logout")).toBeInTheDocument();
+    expect(screen.getByText("Home")).toBeInTheDocument();
   });
 
   it("should trigger logout on button click", () => {

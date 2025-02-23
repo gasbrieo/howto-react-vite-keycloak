@@ -1,10 +1,10 @@
 import type { FC } from "react";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 
-import type { AuthState } from "@/stores/authStore";
+import type { AuthAction, AuthState } from "@/stores/authStore";
 
 interface RouterContext {
-  auth: AuthState;
+  auth: AuthState & AuthAction;
 }
 
 const RouteComponent: FC = () => {
