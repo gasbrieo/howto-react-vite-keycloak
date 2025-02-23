@@ -22,8 +22,8 @@ const App: FC = () => {
 
   return (
     <RouterProvider
-      router={router}
       context={{ auth }}
+      router={router}
     />
   );
 };

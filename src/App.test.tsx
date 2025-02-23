@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 import App from "./App";
 
@@ -17,9 +17,6 @@ describe("App", () => {
     render(<App />);
 
     expect(screen.getByText("Loading...")).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText("Login")).toBeInTheDocument();
-    });
+    expect(await screen.findByText("Login")).toBeInTheDocument();
   });
 });
