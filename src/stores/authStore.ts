@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState & AuthAction>()(
           const authenticated = await keycloak.init(keycloakInitOptions);
 
           if (authenticated) {
-            set({ user: keycloak.tokenParsed, authenticated: true });
+            set({ authenticated: true, user: keycloak.tokenParsed });
           }
         } catch (error) {
           console.error(error);
@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState & AuthAction>()(
 
       logout: () => {
         keycloak.logout();
-        set({ user: null, authenticated: false });
+        set({ authenticated: false, user: null });
       },
 
       hasRole: (role: string) => {

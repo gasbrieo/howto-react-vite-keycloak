@@ -6,15 +6,16 @@ import { useAuthStore } from "@/stores/authStore";
 
 const App: FC = () => {
   const [loading, setLoading] = useState(true);
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
   const auth = useAuthStore((state) => state);
 
   useEffect(() => {
     const init = async () => {
-      await auth.initializeAuth();
+      await initializeAuth();
       setLoading(false);
     };
     init();
-  }, []);
+  }, [initializeAuth]);
 
   if (loading) {
     return <div>Loading...</div>;

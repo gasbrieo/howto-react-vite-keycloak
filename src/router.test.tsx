@@ -1,40 +1,20 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createMemoryHistory, RouterProvider } from "@tanstack/react-router";
 
-import router from "./router";
-import { AuthAction, AuthState } from "./stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 
-vi.mock("@/stores/authStore", () => ({
-  useAuthStore: (selector: any) =>
-    selector({
-      login: vi.fn(),
-      logout: vi.fn(),
-    }),
-}));
+import router from "./router";
 
 describe("Router", () => {
-  let auth: AuthState & AuthAction;
-
-  beforeEach(() => {
-    auth = {
-      authenticated: false,
-      user: null,
-      hasRole: vi.fn(),
-      logout: vi.fn(),
-      login: vi.fn(),
-      initializeAuth: vi.fn(),
-    };
-  });
-
   describe("Home", () => {
     it("should allow access to Home when authenticated", async () => {
-      auth.authenticated = true;
+      useAuthStore.setState({ authenticated: true, user: {} });
       const history = createMemoryHistory({ initialEntries: ["/"] });
 
       render(
         <RouterProvider
-          context={{ auth }}
+          context={{ auth: useAuthStore.getState() }}
           history={history}
           router={router}
         />
@@ -44,12 +24,12 @@ describe("Router", () => {
     });
 
     it("should redirect to Login when not authenticated", async () => {
-      auth.authenticated = false;
+      useAuthStore.setState({ authenticated: false });
       const history = createMemoryHistory({ initialEntries: ["/"] });
 
       render(
         <RouterProvider
-          context={{ auth }}
+          context={{ auth: useAuthStore.getState() }}
           history={history}
           router={router}
         />
@@ -61,13 +41,12 @@ describe("Router", () => {
 
   describe("Dashboard", () => {
     it("should allow access to Dashboard when authorized", async () => {
-      auth.authenticated = true;
-      auth.hasRole = vi.fn().mockReturnValue(true);
+      useAuthStore.setState({ authenticated: true, user: { roles: "writer" } });
       const history = createMemoryHistory({ initialEntries: ["/dashboard"] });
 
       render(
         <RouterProvider
-          context={{ auth }}
+          context={{ auth: useAuthStore.getState() }}
           history={history}
           router={router}
         />
@@ -77,13 +56,12 @@ describe("Router", () => {
     });
 
     it("should redirect to Home when not authorized", async () => {
-      auth.authenticated = true;
-      auth.hasRole = vi.fn().mockReturnValue(false);
+      useAuthStore.setState({ authenticated: true, user: { roles: "reader" } });
       const history = createMemoryHistory({ initialEntries: ["/dashboard"] });
 
       render(
         <RouterProvider
-          context={{ auth }}
+          context={{ auth: useAuthStore.getState() }}
           history={history}
           router={router}
         />
@@ -93,12 +71,12 @@ describe("Router", () => {
     });
 
     it("should redirect to Login when not authenticated", async () => {
-      auth.authenticated = false;
+      useAuthStore.setState({ authenticated: false });
       const history = createMemoryHistory({ initialEntries: ["/dashboard"] });
 
       render(
         <RouterProvider
-          context={{ auth }}
+          context={{ auth: useAuthStore.getState() }}
           history={history}
           router={router}
         />
@@ -110,12 +88,12 @@ describe("Router", () => {
 
   describe("Login", () => {
     it("should allow access to Login when not authenticated", async () => {
-      auth.authenticated = false;
+      useAuthStore.setState({ authenticated: false });
       const history = createMemoryHistory({ initialEntries: ["/login"] });
 
       render(
         <RouterProvider
-          context={{ auth }}
+          context={{ auth: useAuthStore.getState() }}
           history={history}
           router={router}
         />
@@ -125,12 +103,12 @@ describe("Router", () => {
     });
 
     it("should redirect to Home when authenticated", async () => {
-      auth.authenticated = true;
+      useAuthStore.setState({ authenticated: true });
       const history = createMemoryHistory({ initialEntries: ["/login"] });
 
       render(
         <RouterProvider
-          context={{ auth }}
+          context={{ auth: useAuthStore.getState() }}
           history={history}
           router={router}
         />

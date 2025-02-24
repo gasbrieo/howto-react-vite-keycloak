@@ -1,22 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
+
+import { keycloak } from "@/libs/keycloak";
+import { useAuthStore } from "@/stores/authStore";
 
 import Home from "./Home";
 
-let mockLogout = vi.fn();
-
-vi.mock("@/stores/authStore", () => ({
-  useAuthStore: (selector: any) =>
-    selector({
-      logout: mockLogout,
-    }),
-}));
-
 describe("Home", () => {
-  beforeEach(() => {
-    mockLogout = vi.fn();
-  });
-
   it("should render properly", () => {
     render(<Home />);
 
@@ -24,10 +14,14 @@ describe("Home", () => {
   });
 
   it("should trigger logout on button click", () => {
+    useAuthStore.setState({ authenticated: true, user: {} });
+
     render(<Home />);
 
     fireEvent.click(screen.getByText("Logout"));
 
-    expect(mockLogout).toHaveBeenCalledTimes(1);
+    expect(keycloak.logout).toHaveBeenCalledTimes(1);
+    expect(useAuthStore.getState().authenticated).toBeFalsy();
+    expect(useAuthStore.getState().user).toBeNull();
   });
 });

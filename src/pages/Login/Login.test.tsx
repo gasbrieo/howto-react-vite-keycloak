@@ -1,22 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
+
+import { keycloak } from "@/libs/keycloak";
 
 import Login from "./Login";
 
-let mockLogin = vi.fn();
-
-vi.mock("@/stores/authStore", () => ({
-  useAuthStore: (selector: any) =>
-    selector({
-      login: mockLogin,
-    }),
-}));
-
 describe("Login", () => {
-  beforeEach(() => {
-    mockLogin = vi.fn();
-  });
-
   it("should render properly", () => {
     render(<Login />);
 
@@ -28,6 +17,6 @@ describe("Login", () => {
 
     fireEvent.click(screen.getByText("Login"));
 
-    expect(mockLogin).toHaveBeenCalledTimes(1);
+    expect(keycloak.login).toHaveBeenCalledTimes(1);
   });
 });
