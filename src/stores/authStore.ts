@@ -22,14 +22,10 @@ export const useAuthStore = create<AuthState & AuthAction>()(
       user: null,
 
       initializeAuth: async () => {
-        try {
-          const authenticated = await keycloak.init(keycloakInitOptions);
+        const authenticated = await keycloak.init(keycloakInitOptions);
 
-          if (authenticated) {
-            set({ authenticated: true, user: keycloak.tokenParsed });
-          }
-        } catch (error) {
-          console.error(error);
+        if (authenticated) {
+          set({ authenticated: true, user: keycloak.tokenParsed });
         }
       },
 
